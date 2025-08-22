@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Star, Store, Users, TrendingUp, ShoppingBag, MapPin } from 'lucide-react'
 import { useNavigate } from 'react-router-dom';
+import Header from '../components/Header';
+import { AuthContext } from '../context/AuthContext';
 
 const HomePage = () => {
+  const { logout } = useContext(AuthContext);
     const navigate = useNavigate();
   const handleLogin = () => {
     // Navigate to login page
@@ -14,10 +17,15 @@ const HomePage = () => {
     navigate('/signup');
   }
 
+  const handleLogout = () => {
+    logout();
+    navigate("/login"); // redirect to login
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
-      <header className="bg-white shadow-md">
+      {/* <header className="bg-white shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center space-x-3">
@@ -42,7 +50,8 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-      </header>
+      </header> */}
+      <Header handleLogin={handleLogin} handleSignup={handleSignup} handleLogout={handleLogout} />
 
       {/* Hero Section */}
       <section className="relative py-20 px-4 sm:px-6 lg:px-8">
