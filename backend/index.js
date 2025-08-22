@@ -25,6 +25,7 @@ app.use("/api/auth", authRoutes);
 
 app.use("/api/admin", adminRoutes);
 
+
 app.use("/api/stores", storeRoutes);
 
 app.use("/api/owners", ownerRoutes);
