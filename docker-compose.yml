@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   frontend:
-    image: frontend-rating-app
+    image: wiings09/frontend-rating-app:v1
     container_name: frontend
     ports:
       - "8080:80"    # frontend exposed on host
@@ -12,7 +12,7 @@ services:
       - VITE_API_URL=http://localhost:5000/api   # 👈 use service name, not localhost
 
   backend:
-    image: backend-rating-app
+    image: wiings09/backend-rating-app:v1
     container_name: backend
     ports:
       - "5000:5000"   # backend exposed on host
