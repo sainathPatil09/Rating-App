@@ -1,3 +1,6 @@
+## Run in your local
+- docker compose up -d --build
+
 ## IMAGES
 
 ![App Screenshot](images/signup.png)
