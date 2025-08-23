@@ -15,10 +15,10 @@ connectDB();
 
 const app = express();
 app.use(express.json());
-
+const frontend_url = process.env.FRONTEND_URL;
 app.use(cors({
-  origin: 'http://localhost:5173', // frontend origin
-  credentials: true               // if you need cookies/auth headers
+  origin: frontend_url, // frontend origin
+  credentials: true      // if you need cookies/auth headers
 }));
 
 app.use("/api/auth", authRoutes);
