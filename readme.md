@@ -99,6 +99,21 @@ docker run -d -p 3000:3000 --name=grafana grafana/grafana
 
 > **Tip:** Use `docker ps` to check running containers and `docker stop <container-name>` to stop them.
 
+##  Custom Metrics Query
+- ratings_submitted_total
+- current_average_rating
+- active_users_count
+- account_profile_updates_total
+- account_password_changes_total
+- total_users
+- total_stores
+- user_signups_total
+- user_logins_total
+- user_login_failures_total
+- database_connections_active
+- nodejs_gc_duration_seconds
+- system_cpu_usage_percent
+
 <!-- docker run -d `
    --name prometheus `
    -p 9090:9090 `
