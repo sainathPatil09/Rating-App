@@ -1,5 +1,7 @@
 ## Run in your local
 - docker compose up -d --build
+## for profile page
+- go to /profile
 
 ## IMAGES
 
