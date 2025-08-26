@@ -1,0 +1,44 @@
+# receivers:
+#   otlp:
+#     protocols:
+#       grpc:
+#       http:
+
+# exporters:
+#   prometheus:
+#     endpoint: "0.0.0.0:9464"
+#   otlp:
+#     endpoint: "jaeger:4317"
+#     tls:
+#       insecure: true
+
+# service:
+#   pipelines:
+#     traces:
+#       receivers: [otlp]
+#       exporters: [otlp]
+#     metrics:
+#       receivers: [otlp]
+#       exporters: [prometheus]
+
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+
+exporters:
+  prometheus:
+    endpoint: "0.0.0.0:9464"
+  logging:   # logs all spans/metrics to console
+    loglevel: debug
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      exporters: [logging]
+    metrics:
+      receivers: [otlp]
+      exporters: [prometheus, logging]

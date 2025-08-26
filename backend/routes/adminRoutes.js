@@ -5,6 +5,14 @@ import {User} from "../models/user.model.js";
 import {Store} from "../models/store.model.js";
 import bcrypt from "bcryptjs";
 
+import {
+  adminUsersCreated,
+  adminStoresCreated,
+  totalUsersGauge,
+  totalStoresGauge
+} from "../enhancedInstrumentation.mjs";
+
+
 const router = express.Router();
 
 
@@ -32,6 +40,7 @@ router.post("/create-user", protect, authorize("ADMIN"), async (req, res) => {
       role,
     });
 
+    adminUsersCreated.add(1, { userId: user._id.toString() });
     res.status(201).json({ msg: "User created", user });
   } catch (err) {
     res.status(500).json({ msg: err.message });
@@ -62,6 +71,7 @@ router.post("/createStore", protect, authorize("ADMIN"), async (req, res) => {
     const store = new Store({ name, email, address, owner });
     await store.save();
 
+    adminStoresCreated.add(1, { storeId: store._id.toString() });
     res.status(201).json(store);
   } catch (err) {
     res.status(500).json({ msg: err.message });

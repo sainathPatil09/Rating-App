@@ -4,6 +4,13 @@ import bcrypt from "bcryptjs";
 import { protect } from "../middleware/authMiddleware.js";
 import { User } from "../models/user.model.js";
 
+import {
+  accountProfileUpdates,
+  accountPasswordChanges,
+  accountPasswordFailures,
+} from "../enhancedInstrumentation.mjs";
+
+
 const router = express.Router();
 
 router.put("/password", protect, async (req, res) => {
@@ -19,10 +26,16 @@ router.put("/password", protect, async (req, res) => {
 
     const user = await User.findById(req.user._id);
     const ok = await bcrypt.compare(oldPassword, user.password);
-    if (!ok) return res.status(400).json({ msg: "Current password is incorrect" });
+    if (!ok) {
+      accountPasswordFailures.add(1, { reason: "incorrect_old", userId: req.user._id.toString() });
+      return res.status(400).json({ msg: "Current password is incorrect" });
+    }
 
     user.password = await bcrypt.hash(newPassword, 10);
     await user.save();
+
+    accountPasswordChanges.add(1, { userId: req.user._id.toString() });
+
     res.json({ msg: "Password updated" });
   } catch (e) {
     res.status(500).json({ msg: e.message });
@@ -50,6 +63,9 @@ router.put("/me", protect, async (req, res) => {
     user.email = email || user.email;
 
     await user.save();
+
+    accountProfileUpdates.add(1, { userId: req.user._id.toString() });
+
     res.json({ msg: "Profile updated successfully", user });
   } catch (err) {
     res.status(500).json({ msg: err.message });

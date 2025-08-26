@@ -11,3 +11,13 @@
 ![Logo](images/admin-dashboard.png)
 ![Logo](images/owner-dashboard.png)
 ![Logo](images/owner-dashboard2.png)
+
+<!-- 
+ docker run -d `
+>>   --name prometheus `
+>>   -p 9090:9090 `
+>>   -v ${PWD}/prometheus.yml:/etc/prometheus/prometheus.yml `
+>>   prom/prometheus -->
+
+<!-- docker run -d --name jaeger -p 4318:4318 -p 16686:16686 jaegertracing/all-in-one:latest -->
+

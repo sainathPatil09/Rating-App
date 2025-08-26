@@ -2,6 +2,13 @@
 import {User} from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+// import { ratingCounter } from "../otel.js";
+
+import {
+  userSignups,
+  userLogins,
+  userLoginFailures,
+} from "../enhancedInstrumentation.mjs"
 
 // Signup (only for normal users directly)
 export const signup = async (req, res) => {
@@ -24,6 +31,7 @@ export const signup = async (req, res) => {
     user = new User({ name, email, password: hashedPass, address, role });
     await user.save();
 
+    userSignups.add(1, { role });
     res.status(201).json({ msg: "User registered successfully" });
   } catch (err) {
     res.status(500).json({ msg: err.message });
@@ -41,13 +49,24 @@ export const login = async (req, res) => {
     if (!user) return res.status(400).json({ msg: "Invalid credentials" });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
+    if (!isMatch) {
+      userLoginFailures.add(1, { reason: "bad_password", userId: user._id.toString() });
+      return res.status(400).json({ msg: "Invalid credentials" });
+    }
+
+    user.lastLogin = new Date();
+    await user.save();
 
     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "1d" }
     );
+    // Increase counter
+    // ratingCounter.add(1);
+    
+    // ===== Metrics =====
+    userLogins.add(1, { role: user.role, userId: user._id.toString() });
 
     res.json({ token, user: { id: user._id, name: user.name, role: user.role } });
   } catch (err) {
