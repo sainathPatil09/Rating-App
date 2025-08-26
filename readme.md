@@ -114,6 +114,13 @@ docker run -d -p 3000:3000 --name=grafana grafana/grafana
 - nodejs_gc_duration_seconds
 - system_cpu_usage_percent
 
+## Images
+
+## **Architecture**
+![Promethues ui](/images/promethues.png)
+![Grafana ui](/images/grafana.png)
+![jaeger ui](/images/jaeger.png)
+
 <!-- docker run -d `
    --name prometheus `
    -p 9090:9090 `
