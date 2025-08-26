@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Search, Store, MapPin, Star, Filter, ArrowLeft, Heart, Clock } from "lucide-react";
+import { Search, Store, MapPin, Star, Filter, ArrowLeft, Heart, Clock, User } from "lucide-react";
 import API from "../services/api";
 import { useNavigate } from "react-router-dom";
 
@@ -106,6 +106,11 @@ export default function StoreList() {
     console.log("Navigate back to home");
   };
 
+  const handleProfileNavigation = () => {
+    navigate("/profile");
+    console.log("Navigate to profile");
+  };
+
   // Filter and sort stores
   const filteredStores = stores
     .filter((store) => {
@@ -208,9 +213,9 @@ export default function StoreList() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+        <div className="max-w-7xl  mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between  ">
+            <div className="flex items-center w-full space-x-4">
               <button
                 onClick={handleBackToHome}
                 className="flex items-center text-gray-600 hover:text-blue-600 transition-colors duration-200"
@@ -218,18 +223,30 @@ export default function StoreList() {
                 <ArrowLeft className="h-5 w-5 mr-2" />
                 Back to Home
               </button>
-              <div className="flex items-center space-x-3">
+
+              <div className="flex justify-end items-center space-x-3">
+
                 <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-lg">
                   <Store className="h-6 w-6 text-white" />
                 </div>
+
                 <div>
                   <h1 className="text-2xl font-bold text-gray-900">Store Directory</h1>
                   <p className="text-sm text-gray-600">{filteredStores.length} stores available</p>
                 </div>
               </div>
+
+
             </div>
+              <button
+                onClick={handleProfileNavigation}
+                className="flex items-center flex-col text-gray-600 hover:text-blue-600 transition-colors duration-200"
+              >
+                <User className="h-8 w-8 mr-2" />
+              </button>
           </div>
         </div>
+
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { Store, Star, Users, Eye, EyeOff, MapPin, TrendingUp, Award, Calendar } from "lucide-react";
+import { Store, User, Star, Users, Eye, EyeOff, MapPin, TrendingUp, Award, Calendar } from "lucide-react";
 import API from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 export default function OwnerDashboard() {
+  const navigate = useNavigate();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showDetails, setShowDetails] = useState(false);
@@ -59,6 +61,12 @@ export default function OwnerDashboard() {
     return "bg-red-50 border-red-200";
   };
 
+  const handleProfileNavigation = () => {
+    navigate("/profile");
+    console.log("Navigate to profile");
+  };
+
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -88,12 +96,20 @@ export default function OwnerDashboard() {
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <Store className="w-8 h-8 text-blue-600" />
-            <h1 className="text-3xl font-bold text-gray-900">Store Dashboard</h1>
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <Store className="w-8 h-8 text-blue-600" />
+              <h1 className="text-3xl font-bold text-gray-900">Store Dashboard</h1>
+            </div>
+            <p className="text-gray-600">Monitor your store's performance and customer feedback</p>
           </div>
-          <p className="text-gray-600">Monitor your store's performance and customer feedback</p>
+          <button
+            onClick={handleProfileNavigation}
+            className="flex items-center flex-col text-gray-600 hover:text-blue-600 transition-colors duration-200"
+          >
+            <User className="h-8 w-8 mr-2" />
+          </button>
         </div>
 
         {/* Store Info Card */}

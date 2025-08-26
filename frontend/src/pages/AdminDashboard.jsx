@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { Users, Store, Star, Plus, Search, X, UserCheck, Shield, ShoppingBag } from "lucide-react";
+import { Users, User, Store, Star, Plus, Search, X, UserCheck, Shield, ShoppingBag } from "lucide-react";
 import API from "../services/api";
+import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     totalUsers: 0,
     totalStores: 0,
@@ -115,13 +117,27 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleProfileNavigation = () => {
+    navigate("/profile");
+    console.log("Navigate to profile");
+  };
+
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
-          <p className="text-gray-600">Manage users, stores, and monitor platform activity</p>
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
+            <p className="text-gray-600">Manage users, stores, and monitor platform activity</p>
+          </div>
+          <button
+            onClick={handleProfileNavigation}
+            className="flex items-center flex-col text-gray-600 hover:text-blue-600 transition-colors duration-200"
+          >
+            <User className="h-8 w-8 mr-2" />
+          </button>
         </div>
 
         {/* Stats Cards */}
