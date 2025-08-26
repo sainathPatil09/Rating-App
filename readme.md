@@ -1,16 +1,28 @@
-## Run in your local
-- docker compose up -d --build
+# **Rating Store – Observability with OpenTelemetry**
 
-## IMAGES
+This project demonstrates how to instrument a Node.js/Express service with OpenTelemetry (OTel) for metrics and traces, and how to export them to Prometheus (for metrics) and Jaeger (for traces).
 
-![App Screenshot](images/signup.png)
-![Logo](images/login.png)
-![Logo](images/user-dashboard.png)
-![Logo](images/profile.png)
-![Logo](images/homepage.png)
-![Logo](images/admin-dashboard.png)
-![Logo](images/owner-dashboard.png)
-![Logo](images/owner-dashboard2.png)
+## NOTE: 
+
+## **🚀 Features**
+
+- ✅ Automatic tracing for HTTP, Express, and Mongoose requests
+
+- ✅ Custom metrics middleware for request counts, durations, errors, and active users
+
+- ✅ Exposes /metrics endpoint for Prometheus scraping
+
+- ✅ OTLP exporter for sending traces
+
+- ✅ Integrates with Prometheus + Jaeger for monitoring and visualization
+
+---
+
+## **Architecture**
+![Observability Architecture](/images/observibility.png)
+
+---
+
 
 <!-- 
  docker run -d `
