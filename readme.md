@@ -130,3 +130,8 @@ docker run -d -p 3000:3000 --name=grafana grafana/grafana
 docker run -d --name jaeger -p 4318:4318 -p 16686:16686 jaegertracing/all-in-one:latest
 
 docker run -d -p 3000:3000 --name=grafana grafana/grafana  -->
+
+
+<!-- docker build \
+  --build-arg VITE_API_URL=https://myapp.example.com/api \
+  -t wiings09/frontend-rating-app:v1 . -->

@@ -1,0 +1,109 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: backend
+#   namespace: rating-app
+#   labels:
+#     app: backend
+# spec:
+#   replicas: 1
+#   strategy:
+#     type: RollingUpdate
+#     rollingUpdate:
+#       maxSurge: 1
+#       maxUnavailable: 0
+#   selector:
+#     matchLabels:
+#       app: backend
+#   template:
+#     metadata:
+#       labels:
+#         app: backend
+#     spec:
+#       containers:
+#         - name: backend
+#           image: wiings09/backend-rating-app-k8s:v1
+#           imagePullPolicy: Always
+#           ports:
+#             - containerPort: 5000
+#           env:
+#             - name: MONGO_USER
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: mongo-secret
+#                   key: MONGO_USER
+#             - name: MONGO_PASSWORD
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: mongo-secret
+#                   key: MONGO_PASSWORD
+#             - name: MONGO_URI
+#               value: mongodb://$(MONGO_USER):$(MONGO_PASSWORD)@mongodb-svc:27017/bookstore?directConnection=true
+#           resources:
+#             requests:
+#               cpu: 100m
+#               memory: 128Mi
+#             limits:
+#               cpu: 200m
+#               memory: 256Mi
+#           livenessProbe:
+#             httpGet:
+#               path: /api/ok
+#               port: 5000
+#             initialDelaySeconds: 5
+#             periodSeconds: 10
+#           readinessProbe:
+#             httpGet:
+#               path: /api/ok
+#               port: 5000
+#             initialDelaySeconds: 5
+#             periodSeconds: 10
+
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: rating-app
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: wiings09/backend-rating-app-k8s:v1
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: backend-config
+            - secretRef:
+                name: backend-secret
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+          livenessProbe:
+            httpGet:
+              path: /api/ok
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/ok
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
