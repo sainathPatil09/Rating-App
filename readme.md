@@ -13,3 +13,4 @@
 ![Logo](images/admin-dashboard.png)
 ![Logo](images/owner-dashboard.png)
 ![Logo](images/owner-dashboard2.png)
+docker build -t k8s-rating-app --build-arg VITE_API_URL=http://localhost:5000 .

@@ -263,7 +263,7 @@ const AdminDashboard = () => {
                 >
                   <option value="USER">Normal User</option>
                   <option value="ADMIN">Admin</option>
-                  <option value="STORE_OWNER">Store Owner</option>
+                  <option value="OWNER">Store Owner</option>
                 </select>
                 <button
                   type="submit"

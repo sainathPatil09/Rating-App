@@ -57,7 +57,7 @@ const LoginPage = () => {
       } else {
         navigation("/stores"); // default for normal users
       }
-      console.log("Login successful", { email, password });
+      // console.log("Login successful", { email, password });
     } catch (err) {
       setErrors({ general: err.response?.data?.msg || "Login failed" });
     } finally {

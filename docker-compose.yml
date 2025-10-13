@@ -1,8 +1,9 @@
-version: "3.9"
+# version: "3.9"
 
 services:
   frontend:
-    image: wiings09/frontend-rating-app:v1
+    # image: wiings09/frontend-rating-app:v1
+    image: wiings09/k8s-rating-app:local
     container_name: frontend
     ports:
       - "8080:80"    # frontend exposed on host
