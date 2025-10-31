@@ -1,11 +1,12 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: frontend-svc
+  name: mongo
   namespace: project3
 spec:
+  clusterIP: None
   selector:
-    app: frontend
+    app: mongo
   ports:
-    - port: 80
-      targetPort: 80
+    - port: 27017
+      targetPort: 27017
