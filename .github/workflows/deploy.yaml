@@ -21,7 +21,7 @@ jobs:
       - name: Generate New Tag
         id: tag
         run: |
-          TAG=$(curl -s https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/rating-frontend/tags/?page_size=1 | jq -r '.results[0].name' || echo "cicdV0")
+          TAG=$(curl -s https://hub.docker.com/v2/repositories/${{ secrets.DOCKERHUB_USERNAME }}/k8s-rating-frontend/tags/?page_size=1 | jq -r '.results[0].name' || echo "cicdV0")
           NUM=$(echo $TAG | sed 's/[^0-9]*//g')
           NEXT=$((NUM + 1))
           NEW_TAG="cicdV$NEXT"
@@ -30,8 +30,8 @@ jobs:
 
       - name: Build Docker Images
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/rating-frontend:${{ steps.tag.outputs.NEW_TAG }} --build-arg VITE_API_URL=http://myapp.local/api ./frontend
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/rating-backend:${{ steps.tag.outputs.NEW_TAG }} ./backend
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/k8s-rating-frontend:${{ steps.tag.outputs.NEW_TAG }} --build-arg VITE_API_URL=http://myapp.local/api ./frontend
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/backend-rating-app:${{ steps.tag.outputs.NEW_TAG }} ./backend
 
 
   push:
@@ -45,11 +45,11 @@ jobs:
 
       - name: Pull and Push Images
         run: |
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/rating-frontend:${{ needs.build.outputs.tag }}
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/rating-backend:${{ needs.build.outputs.tag }}
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/k8s-rating-frontend:${{ needs.build.outputs.tag }}
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/backend-rating-app:${{ needs.build.outputs.tag }}
 
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/rating-frontend:${{ needs.build.outputs.tag }}
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/rating-backend:${{ needs.build.outputs.tag }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/k8s-rating-frontend:${{ needs.build.outputs.tag }}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend-rating-app:${{ needs.build.outputs.tag }}
 
   deploy:
     name: Deploy to Kubernetes
@@ -75,5 +75,5 @@ jobs:
           helm upgrade --install $APP_NAME ./rating-app \
             --namespace $NAMESPACE \
             --create-namespace \
-            --set frontend.image=${{ secrets.DOCKERHUB_USERNAME }}/rating-frontend:${{ needs.build.outputs.tag }} \
-            --set backend.image=${{ secrets.DOCKERHUB_USERNAME }}/rating-backend:${{ needs.build.outputs.tag }}
+            --set frontend.image=${{ secrets.DOCKERHUB_USERNAME }}/k8s-rating-frontend:${{ needs.build.outputs.tag }} \
+            --set backend.image=${{ secrets.DOCKERHUB_USERNAME }}/backend-rating-app:${{ needs.build.outputs.tag }}
