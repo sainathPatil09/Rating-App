@@ -1,0 +1,22 @@
+frontend:
+  image: wiings09/k8s-rating-frontend:k8s
+  replicas: 2
+
+
+backend:
+  image: wiings09/backend-rating-app:v1
+  replicas: 2
+  port: 5000
+  frontendUrl: "http://myapp.local"
+  database: "rating_app"
+  jwtSecret: "supersecretkey12345"
+
+
+mongo:
+  image: mongo:latest
+  replicas: 2
+  storageClass: aws-ebs
+  storage: 1Gi
+
+ingress:
+  host: myapp.local

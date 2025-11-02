@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-backend-config
+  namespace: {{ .Release.Namespace }}
+data:
+  PORT: "{{ .Values.backend.port }}"
+  FRONTEND_URL: "{{ .Values.backend.frontendUrl }}"
+

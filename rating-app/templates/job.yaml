@@ -1,0 +1,58 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-mongo-init
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  backoffLimit: 4
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: mongo-init
+          image: mongo:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "⏳ Waiting for MongoDB pods to be ready..."
+
+              until mongosh --host {{ .Release.Name }}-mongo-0.{{ .Release.Name }}-mongo.{{ .Release.Namespace }}.svc.cluster.local:27017 --eval "db.adminCommand('ping')" >/dev/null 2>&1; do
+                echo "Waiting for mongo-0..."
+                sleep 3
+              done
+
+              until mongosh --host {{ .Release.Name }}-mongo-1.{{ .Release.Name }}-mongo.{{ .Release.Namespace }}.svc.cluster.local:27017 --eval "db.adminCommand('ping')" >/dev/null 2>&1; do
+                echo "Waiting for mongo-1..."
+                sleep 3
+              done
+
+              echo "✅ All MongoDB pods are up. Initializing replica set..."
+
+              mongosh --host {{ .Release.Name }}-mongo-0.{{ .Release.Name }}-mongo.{{ .Release.Namespace }}.svc.cluster.local:27017 --eval '
+                const config = {
+                  _id: "rs0",
+                  members: [
+                    { _id: 0, host: "{{ .Release.Name }}-mongo-0.{{ .Release.Name }}-mongo.{{ .Release.Namespace }}.svc.cluster.local:27017" },
+                    { _id: 1, host: "{{ .Release.Name }}-mongo-1.{{ .Release.Name }}-mongo.{{ .Release.Namespace }}.svc.cluster.local:27017" }
+                  ]
+                };
+                try {
+                  const status = rs.status();
+                  if (status.ok !== 1) {
+                    print("Initializing replica set...");
+                    rs.initiate(config);
+                  } else {
+                    print("Replica set already initialized.");
+                  }
+                } catch (e) {
+                  print("Replica set not yet initialized, attempting rs.initiate...");
+                  rs.initiate(config);
+                }
+              '
+
+              echo "✅ Replica set initialization complete."
+
