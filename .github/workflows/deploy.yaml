@@ -2,7 +2,7 @@ name: CI/CD Pipeline for Rating App
 on:
   push:
     branches:
-      - main
+      - cicd
 
 env: 
   APP_NAME: rating-app
