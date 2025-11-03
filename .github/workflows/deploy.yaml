@@ -56,8 +56,11 @@ jobs:
       - name: Configure kubeconfig
         run: |
           echo "${{ secrets.KUBE_CONFIG }}" > kubeconfig.yaml
-          export KUBECONFIG=$(pwd)/kubeconfig.yaml
+          export KUBECONFIG=$(pwd)/kubeconfig.yaml >> $GITHUB_ENV
           kubectl config use-context ${{ secrets.KUBE_CONTEXT }}
+
+      - name: Verify Kubernetes Access
+        run: kubectl get nodes
 
       - name: Helm Deploy
         run: |
