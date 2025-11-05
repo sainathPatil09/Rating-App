@@ -1,0 +1,52 @@
+name: Rollback Helm Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      revision:
+        description: "Helm revision number to rollback to"
+        required: true
+        default: "1"
+
+env:
+  APP_NAME: rating-app
+  NAMESPACE: project4
+  
+jobs:
+  rollback:
+    name: 🧯 Rollback Deployment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-south-1
+
+      - name: Configure kubeconfig for EKS
+        run: |
+          aws eks update-kubeconfig --region ap-south-1 --name my-cluster
+          kubectl get nodes
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: v3.14.0
+
+      - name: Show Helm History
+        run: helm history $APP_NAME -n $NAMESPACE
+
+      - name: Rollback to Selected Revision
+        run: |
+          echo "Rolling back to revision ${{ github.event.inputs.revision }}"
+          helm rollback $APP_NAME ${{ github.event.inputs.revision }} -n $NAMESPACE
+
+      - name: Verify Rollback
+        run: |
+          kubectl rollout status deployment/frontend-deployment -n $NAMESPACE
+          kubectl rollout status deployment/backend-deployment -n $NAMESPACE
