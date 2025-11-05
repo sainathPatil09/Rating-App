@@ -11,7 +11,7 @@ on:
 env:
   APP_NAME: rating-app
   NAMESPACE: project4
-
+  
 jobs:
   rollback:
     name: 🧯 Rollback Deployment
