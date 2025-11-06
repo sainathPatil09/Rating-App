@@ -48,5 +48,5 @@ jobs:
 
       - name: Verify Rollback
         run: |
-          kubectl rollout status deployment/frontend-deployment -n $NAMESPACE
-          kubectl rollout status deployment/backend-deployment -n $NAMESPACE
+          kubectl rollout status deployment/rating-app-frontend -n $NAMESPACE
+          kubectl rollout status deployment/rating-app-backend -n $NAMESPACE
