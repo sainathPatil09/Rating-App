@@ -7,14 +7,14 @@ on:
         description: "Helm revision number to rollback to"
         required: true
         default: "1"
- 
+
 env:
   APP_NAME: rating-app
   NAMESPACE: project4
   
 jobs:
   rollback:
-    name: Rollback Deployment
+    name: 🧯Rollback Deployment
     runs-on: ubuntu-latest
 
     steps:
