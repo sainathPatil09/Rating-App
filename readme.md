@@ -1,3 +1,5 @@
+## Switch to otel Branch
+- for observibility resources
 ## Run in your local
 - docker compose up -d --build
 ## for profile page
