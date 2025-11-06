@@ -14,7 +14,7 @@ env:
   
 jobs:
   rollback:
-    name: 🧯 Rollback Deployment
+    name: Rollback Deployment
     runs-on: ubuntu-latest
 
     steps:
