@@ -106,7 +106,7 @@ const LoginPage = () => {
         </div>
 
         {/* Login Form */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-amber-200 rounded-2xl shadow-xl p-8">
           <div className="space-y-6">
             {/* General Error */}
             {errors.general && (
